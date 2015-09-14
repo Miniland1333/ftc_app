@@ -105,7 +105,7 @@ public class LinearTeleTest extends LinearOpMode {
         IR.setPosition(FF);//down
     }
 
-
+    @Override
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
@@ -126,6 +126,7 @@ public class LinearTeleTest extends LinearOpMode {
             spinner();
             goalie();
             TeleMetry();
+            waitOneHardwareCycle();
         }
     }
 
