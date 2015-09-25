@@ -83,7 +83,7 @@ public class TwelveTests extends LinearOpMode {
             six.setPosition((gamepad1.right_stick_y+1)/2);
 
             Telemetry();
-            waitOneHardwareCycle();
+            waitForNextHardwareCycle();
         }
     }
 
