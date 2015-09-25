@@ -42,10 +42,27 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
  * Created by Staff on 9/13/2015.
  */
 public class TwelveTests extends LinearOpMode {
-    Servo Twelve;
+    //Servo Twelve;
+/*    DcMotor Left;
+    DcMotor Right;*/
+    Servo one;
+    Servo two;
+    Servo three;
+    Servo four;
+    Servo five;
+    Servo six;
 
     private void initialize(){
-        Twelve = hardwareMap.servo.get("Twelve");
+        //Twelve = hardwareMap.servo.get("Twelve");
+        /*Left = hardwareMap.dcMotor.get("Left");
+        Right= hardwareMap.dcMotor.get("Right");*/
+        one=hardwareMap.servo.get("one");
+        two=hardwareMap.servo.get("two");
+        three=hardwareMap.servo.get("three");
+        four=hardwareMap.servo.get("four");
+        five=hardwareMap.servo.get("five");
+        six=hardwareMap.servo.get("six");
+
     }
 
     @Override
@@ -54,7 +71,17 @@ public class TwelveTests extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            Twelve.setPosition(((gamepad1.left_stick_y+1)/2));
+            //Twelve.setPosition(((gamepad1.left_stick_y+1)/2));
+           /* Left.setPower(gamepad1.left_stick_y);
+            Right.setPower(-gamepad1.right_stick_y);*/
+
+            one.setPosition((gamepad1.left_stick_y+1)/2);
+            two.setPosition((gamepad1.left_stick_y+1)/2);
+            three.setPosition((gamepad1.left_stick_y+1)/2);
+            four.setPosition((gamepad1.right_stick_y+1)/2);
+            five.setPosition((gamepad1.right_stick_y+1)/2);
+            six.setPosition((gamepad1.right_stick_y+1)/2);
+
             Telemetry();
             waitOneHardwareCycle();
         }
@@ -62,5 +89,6 @@ public class TwelveTests extends LinearOpMode {
 
     public void Telemetry(){
         telemetry.addData("Value",gamepad1.left_stick_y);
+        telemetry.addData("Value2",gamepad1.right_stick_y);
     }
 }
