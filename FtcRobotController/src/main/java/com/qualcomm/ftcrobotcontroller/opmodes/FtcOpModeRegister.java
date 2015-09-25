@@ -94,7 +94,11 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("PushBotIrSeek", PushBotIrSeek.class);
     //manager.register("PushBotSquare", PushBotSquare.class);
 
-    
+    /*
+    * Custom TeleOp Programs
+    */
 
+        manager.register("LinearTeleTest", LinearTeleTest.class);
+        manager.register("TwelveTests", TwelveTests.class);
   }
 }
