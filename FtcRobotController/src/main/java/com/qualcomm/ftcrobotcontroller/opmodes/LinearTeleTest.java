@@ -126,7 +126,7 @@ public class LinearTeleTest extends LinearOpMode {
             spinner();
             goalie();
             TeleMetry();
-            waitOneHardwareCycle();
+            waitForNextHardwareCycle();
         }
     }
 
@@ -153,7 +153,7 @@ public class LinearTeleTest extends LinearOpMode {
             //noinspection StatementWithEmptyBody
             do {
                 //absolutely nothing
-                waitOneHardwareCycle();
+                waitForNextHardwareCycle();
             }while (gamepad2.left_trigger>.5);
             switch (frontOpen) {
                 case 1://close
@@ -187,7 +187,7 @@ public class LinearTeleTest extends LinearOpMode {
             //noinspection StatementWithEmptyBody
             do {
                 //absolutely nothing
-                waitOneHardwareCycle();
+                waitForNextHardwareCycle();
             }while (gamepad2.a);
             switch (goalUp) {
                 case 1://up
