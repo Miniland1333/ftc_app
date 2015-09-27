@@ -1,13 +1,10 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.robocol.Telemetry;
 
 /**
+ * Test New Technology Servos
  * Created by Colin on 9/26/2015.
  */
 public class Colin_Something extends LinearOpMode {

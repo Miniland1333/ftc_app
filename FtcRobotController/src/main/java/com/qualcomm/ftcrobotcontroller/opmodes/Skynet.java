@@ -1,22 +1,22 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by Henry on 9/26/2015.
+ * Test New Technology Servos
+ * Created by James on 9/26/2015.
  */
 public class Skynet extends LinearOpMode {
-Servo Ed;
-    Servo Bob;
-    Servo Ted;
-    DcMotor Betty;
+    Servo Ed;
+    //Servo Bob;
+    //Servo Ted;
+    //DcMotor Betty;
     private void Doctor(){
         Ed=hardwareMap.servo.get("Ed");
-      //  Bob=hardwareMap.servo.get("Bob");
-       // Ted=hardwareMap.servo.get("Ted");
-       // Betty=hardwareMap.dcMotor.get("Betty");
+        //Bob=hardwareMap.servo.get("Bob");
+        //Ted=hardwareMap.servo.get("Ted");
+        //Betty=hardwareMap.dcMotor.get("Betty");
         //Sets things up
     }
     @Override

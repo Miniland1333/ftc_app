@@ -40,6 +40,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Test Linear TeleOp Code
  * Created by Henry on 8/7/2015.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class LinearTeleTest extends LinearOpMode {
     //Motor Zone
     DcMotor LD1;
