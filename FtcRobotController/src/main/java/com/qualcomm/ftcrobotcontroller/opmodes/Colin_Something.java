@@ -32,7 +32,7 @@ public class Colin_Something extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.x) {
-                Sethe.setPosition(.5);
+                Sethe.setPosition(1);
             } else {
 
                 Sethe.setPosition((gamepad1.left_stick_y + 1)/2);
@@ -40,8 +40,8 @@ public class Colin_Something extends LinearOpMode {
                 //Beloved.setPower(((gamepad1.right_stick_x + 1) / 2));
 
                 //Telemetry();
-                waitForNextHardwareCycle();
             }
+            waitForNextHardwareCycle();
         }
     }
 }
