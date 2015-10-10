@@ -173,7 +173,7 @@ public class LinearTeleTest extends LinearOpMode {
      * Controls for the Spinner Motor
      */
     private void spinner(){
-        if (gamepad2.right_stick_y>10||gamepad2.right_stick_y<10){
+        if (gamepad2.right_stick_y>.1||gamepad2.right_stick_y<.1){
             Spin.setPower(gamepad2.right_stick_y);
         }
         else {
