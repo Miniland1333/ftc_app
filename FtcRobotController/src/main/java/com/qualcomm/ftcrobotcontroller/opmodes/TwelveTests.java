@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -40,25 +41,27 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class TwelveTests extends LinearOpMode {
     //Servo Twelve;
-/*    DcMotor Left;
-    DcMotor Right;*/
-    Servo one;
+    DcMotor Left;
+    DcMotor Right;
+/*    Servo one;
     Servo two;
     Servo three;
     Servo four;
     Servo five;
-    Servo six;
+    Servo six;*/
 
     private void initialize(){
         //Twelve = hardwareMap.servo.get("Twelve");
-        /*Left = hardwareMap.dcMotor.get("Left");
-        Right= hardwareMap.dcMotor.get("Right");*/
-        one=hardwareMap.servo.get("one");
+        Left = hardwareMap.dcMotor.get("Left");
+        Right= hardwareMap.dcMotor.get("Right");
+        Left.setDirection(DcMotor.Direction.REVERSE);
+
+/*        one=hardwareMap.servo.get("one");
         two=hardwareMap.servo.get("two");
         three=hardwareMap.servo.get("three");
         four=hardwareMap.servo.get("four");
         five=hardwareMap.servo.get("five");
-        six=hardwareMap.servo.get("six");
+        six=hardwareMap.servo.get("six");*/
 
     }
 
@@ -69,15 +72,15 @@ public class TwelveTests extends LinearOpMode {
 
         while (opModeIsActive()) {
             //Twelve.setPosition(((gamepad1.left_stick_y+1)/2));
-           /* Left.setPower(gamepad1.left_stick_y);
-            Right.setPower(-gamepad1.right_stick_y);*/
+            Left.setPower(gamepad1.left_stick_y);
+            Right.setPower(gamepad1.right_stick_y);
 
-            one.setPosition((gamepad1.left_stick_y+1)/2);
+/*            one.setPosition((gamepad1.left_stick_y+1)/2);
             two.setPosition((gamepad1.left_stick_y+1)/2);
             three.setPosition((gamepad1.left_stick_y+1)/2);
             four.setPosition((gamepad1.right_stick_y+1)/2);
             five.setPosition((gamepad1.right_stick_y+1)/2);
-            six.setPosition((gamepad1.right_stick_y+1)/2);
+            six.setPosition((gamepad1.right_stick_y+1)/2);*/
 
             Telemetry();
             waitForNextHardwareCycle();
