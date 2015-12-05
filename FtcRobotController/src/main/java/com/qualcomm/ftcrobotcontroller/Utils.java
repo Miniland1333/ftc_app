@@ -14,7 +14,9 @@ import java.util.List;
  */
 
 
-@SuppressWarnings("ALL")
+
+
+@SuppressWarnings("JavaDoc")
 public class Utils {
 
     public String IP;
@@ -26,8 +28,8 @@ public class Utils {
      */
     public static String bytesToHex(byte[] bytes) {
         StringBuilder sbuf = new StringBuilder();
-        for(int idx=0; idx < bytes.length; idx++) {
-            int intVal = bytes[idx] & 0xff;
+        for (byte aByte : bytes) {
+            int intVal = aByte & 0xff;
             if (intVal < 0x10) sbuf.append("0");
             sbuf.append(Integer.toHexString(intVal).toUpperCase());
         }
@@ -68,7 +70,7 @@ public class Utils {
             }
             return isUTF8 ? new String(baos.toByteArray(), "UTF-8") : new String(baos.toByteArray());
         } finally {
-            try{ is.close(); } catch(Exception ex){}
+            try{ is.close(); } catch(Exception ignored){}
         }
     }
 
@@ -87,12 +89,11 @@ public class Utils {
                 byte[] mac = intf.getHardwareAddress();
                 if (mac==null) return "";
                 StringBuilder buf = new StringBuilder();
-                for (int idx=0; idx<mac.length; idx++)
-                    buf.append(String.format("%02X:", mac[idx]));
+                for (byte aMac : mac) buf.append(String.format("%02X:", aMac));
                 if (buf.length()>0) buf.deleteCharAt(buf.length()-1);
                 return buf.toString();
             }
-        } catch (Exception ex) { } // for now eat exceptions
+        } catch (Exception ignored) { } // for now eat exceptions
         return "";
         /*try {
             // this is so Linux hack
@@ -104,7 +105,7 @@ public class Utils {
 
     /**
      * Get IP address from first non-localhost interface
-     * @param ipv4  true=return ipv4, false=return ipv6
+     * @param useIPv4  true=return ipv4, false=return ipv6
      * @return  address or empty string
      */
     public static String getIPAddress(boolean useIPv4) {
@@ -120,7 +121,7 @@ public class Utils {
 
                         if (useIPv4) {
                             if (isIPv4)
-                                if (sAddr!="") {
+                                if (!sAddr.equals("")) {
                                     return sAddr;
                                 } else {
                                     return "No IP Address";
@@ -134,7 +135,7 @@ public class Utils {
                     }
                 }
             }
-        } catch (Exception ex) { } // for now eat exceptions
+        } catch (Exception ignored) { } // for now eat exceptions
         return "";
     }
 

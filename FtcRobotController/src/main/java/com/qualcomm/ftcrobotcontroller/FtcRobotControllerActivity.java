@@ -43,6 +43,7 @@ import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -257,7 +258,7 @@ public class FtcRobotControllerActivity extends Activity {
         return true;
       case R.id.ip:
         dimmer.handleDimTimer();
-        Toast.makeText(context, Utils.getIPAddress(true), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, Utils.getIPAddress(true), Toast.LENGTH_LONG).show();
         return true;
       case R.id.action_about:
         // The string to launch this activity must match what's in AndroidManifest of FtcCommon for this activity.
