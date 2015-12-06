@@ -1,6 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -8,15 +9,17 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by James on 9/26/2015.
  */
 public class Skynet extends LinearOpMode {
-    Servo Ed;
+   // Servo Ed;
     //Servo Bob;
     //Servo Ted;
-    //DcMotor Betty;
+    DcMotor Betty;
+    DcMotor Annie;
     private void Doctor(){
-        Ed=hardwareMap.servo.get("Ed");
+        //Ed=hardwareMap.servo.get("Ed");
         //Bob=hardwareMap.servo.get("Bob");
         //Ted=hardwareMap.servo.get("Ted");
-        //Betty=hardwareMap.dcMotor.get("Betty");
+        Betty=hardwareMap.dcMotor.get("Betty");
+        Annie=hardwareMap.dcMotor.get("Annie");
         //Sets things up
     }
     @Override
@@ -29,11 +32,11 @@ public class Skynet extends LinearOpMode {
            /* Left.setPower(gamepad1.left_stick_y);
             Right.setPower(-gamepad1.right_stick_y);*/
 
-            Ed.setPosition((gamepad1.left_stick_y+1)/2);
+            //Ed.setPosition((gamepad1.left_stick_y+1)/2);
           //  Bob.setPosition((gamepad1.left_stick_y+1)/2);
            // Ted.setPosition((gamepad1.left_stick_y+1)/2);
-            //Betty.setPosition((gamepad1.right_stick_y+1)/2);
-            //five.setPosition((gamepad1.right_stick_y+1)/2);
+            Betty.setPower(gamepad1.left_stick_y);
+            Annie.setPower(gamepad1.right_stick_y);
            // six.setPosition((gamepad1.right_stick_y+1)/2);
 
             Telemetry();
