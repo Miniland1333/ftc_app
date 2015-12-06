@@ -104,5 +104,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("TwelveTests", TwelveTests.class);
         manager.register("Colin_Something",Colin_Something.class);
         manager.register("Skynet", Skynet.class);
+        manager.register("Servo Party",ServoParty.class);
 }
 }
