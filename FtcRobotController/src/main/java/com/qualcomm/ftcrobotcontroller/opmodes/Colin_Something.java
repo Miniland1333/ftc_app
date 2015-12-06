@@ -1,6 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -8,15 +9,15 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by Colin on 9/26/2015.
  */
 public class Colin_Something extends LinearOpMode {
-    Servo Sethe;
-    //DcMotor Brandywine;
-    //DcMotor Beloved;
+    //Servo Sethe;
+    DcMotor Right;
+    DcMotor Left;
 
     private void Ready4Action() {
 
-        Sethe = hardwareMap.servo.get("one");
-        //Brandywine=hardwareMap.dcMotor.get("two");
-        //Beloved=hardwareMap.dcMotor.get("three");
+        //Sethe = hardwareMap.servo.get("one");
+        Right=hardwareMap.dcMotor.get("Right");
+        Left=hardwareMap.dcMotor.get("Left");
 
     }
 
@@ -26,13 +27,27 @@ public class Colin_Something extends LinearOpMode {
         Ready4Action();
         waitForStart();
 
-        while (opModeIsActive()) {
+        wait(2000);
 
-            if (gamepad1.x) {
-                Sethe.setPosition(1);
-            } else {
+        Left.setPower(.5);
+        Right.setPower(.5);
+        wait(2000);
+        Left.setPower(0);
+        Right.setPower(0);
 
-                Sethe.setPosition((gamepad1.left_stick_y + 1)/2);
+
+
+
+
+
+
+        //while (opModeIsActive()) {
+
+            //if (gamepad1.x) {
+              //  Sethe.setPosition(1);
+            } //else {
+
+                //Sethe.setPosition((gamepad1.left_stick_y + 1)/2);
                 //Brandywine.setPower((gamepad1.right_stick_y + 1) / 2);
                 //Beloved.setPower(((gamepad1.right_stick_x + 1) / 2));
 
