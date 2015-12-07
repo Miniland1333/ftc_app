@@ -46,7 +46,7 @@ public class ServoParty extends LinearOpMode{
             pickle=(gamepad1.left_stick_y+1)/2;
             pickle= Range.clip(pickle,.25,.65);
             one.setPosition(pickle);
-            two.setPosition(-pickle);
+            two.setPosition(1-pickle);
             Telemetry();
             waitForNextHardwareCycle();
         }
