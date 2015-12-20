@@ -9,17 +9,17 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by James on 9/26/2015.
  */
 public class Skynet extends LinearOpMode {
-   // Servo Ed;
-    //Servo Bob;
-    //Servo Ted;
-    DcMotor Betty;
-    DcMotor Annie;
+    DcMotor RFront;
+    DcMotor RBack;
+    DcMotor LFront;
+    DcMotor LBack;
     private void Doctor(){
-        //Ed=hardwareMap.servo.get("Ed");
-        //Bob=hardwareMap.servo.get("Bob");
-        //Ted=hardwareMap.servo.get("Ted");
-        Betty=hardwareMap.dcMotor.get("Betty");
-        Annie=hardwareMap.dcMotor.get("Annie");
+        RFront=hardwareMap.dcMotor.get("RFront");
+        RBack=hardwareMap.dcMotor.get("RBack");
+        LFront=hardwareMap.dcMotor.get("LFront");
+        LBack=hardwareMap.dcMotor.get("LBack");
+        RBack.setDirection(DcMotor.Direction.REVERSE);
+        RFront.setDirection(DcMotor.Direction.REVERSE);
         //Sets things up
     }
     @Override
@@ -27,26 +27,36 @@ public class Skynet extends LinearOpMode {
         Doctor();
         waitForStart();
 
-        while (opModeIsActive()) {
-            //Twelve.setPosition(((gamepad1.left_stick_y+1)/2));
-           /* Left.setPower(gamepad1.left_stick_y);
-            Right.setPower(-gamepad1.right_stick_y);*/
-
-            //Ed.setPosition((gamepad1.left_stick_y+1)/2);
-          //  Bob.setPosition((gamepad1.left_stick_y+1)/2);
-           // Ted.setPosition((gamepad1.left_stick_y+1)/2);
-            Betty.setPower(gamepad1.left_stick_y);
-            Annie.setPower(gamepad1.right_stick_y);
-           // six.setPosition((gamepad1.right_stick_y+1)/2);
-
-            Telemetry();
-            waitForNextHardwareCycle();
-        }
-    }
-    public void Telemetry(){
-        telemetry.addData("Value", gamepad1.left_stick_y);
-        telemetry.addData("Value2", gamepad1.right_stick_y);
-        //This Does Something.
+        LBack.setPower(0.5);
+        LFront.setPower(0.5);
+        RFront.setPower(0.5);
+        RBack.setPower(0.5);
+        sleep(2000);
+        //drives robot forwards 2 full seconds
+        LBack.setPower(1.0);
+        LFront.setPower(1.0);
+        RFront.setPower(-1.0);
+        RBack.setPower(-1.0);
+        sleep(5000);
+        //makes the robot do a cool clockwise donut for 5 full seconds
+        LBack.setPower(-1.0);
+        LFront.setPower(-1.0);
+        RFront.setPower(1.0);
+        RBack.setPower(1.0);
+        sleep(5000);
+        //makes the robot do a cool counterclockwise donut for 5 full seconds
+        LBack.setPower(-0.5);
+        LFront.setPower(-0.5);
+        RFront.setPower(-0.5);
+        RBack.setPower(-0.5);
+        sleep(2000);
+        //drives robot backwards 2 full seconds
+        LBack.setPower(0.0);
+        LFront.setPower(0.0);
+        RFront.setPower(0.0);
+        RBack.setPower(0.0);
+        sleep(1);
+        //stops everything
     }
 
 }
