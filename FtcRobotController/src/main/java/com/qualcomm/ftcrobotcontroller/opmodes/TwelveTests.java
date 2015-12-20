@@ -34,6 +34,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * A Test Case
@@ -41,24 +42,32 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class TwelveTests extends LinearOpMode {
     //Servo Twelve;
-    DcMotor Left;
-    DcMotor Right;
-/*    Servo one;
+    DcMotor L1;
+    DcMotor L2;
+    DcMotor R1;
+    DcMotor R2;
+
+    Servo one;
     Servo two;
-    Servo three;
+/*    Servo three;
     Servo four;
     Servo five;
     Servo six;*/
 
+    double pickle=.25;
+
     private void initialize(){
         //Twelve = hardwareMap.servo.get("Twelve");
-        Left = hardwareMap.dcMotor.get("Left");
-        Right= hardwareMap.dcMotor.get("Right");
-        Left.setDirection(DcMotor.Direction.REVERSE);
+        L1 = hardwareMap.dcMotor.get("L1");
+        L2 = hardwareMap.dcMotor.get("L2");
+        R1 = hardwareMap.dcMotor.get("R1");
+        R2 = hardwareMap.dcMotor.get("R2");
+        R1.setDirection(DcMotor.Direction.REVERSE);
+        R2.setDirection(DcMotor.Direction.REVERSE);
 
-/*        one=hardwareMap.servo.get("one");
+        one=hardwareMap.servo.get("one");
         two=hardwareMap.servo.get("two");
-        three=hardwareMap.servo.get("three");
+/*        three=hardwareMap.servo.get("three");
         four=hardwareMap.servo.get("four");
         five=hardwareMap.servo.get("five");
         six=hardwareMap.servo.get("six");*/
@@ -72,8 +81,10 @@ public class TwelveTests extends LinearOpMode {
 
         while (opModeIsActive()) {
             //Twelve.setPosition(((gamepad1.left_stick_y+1)/2));
-            Left.setPower(gamepad1.left_stick_y);
-            Right.setPower(gamepad1.right_stick_y);
+            L1.setPower(gamepad1.left_stick_y);
+            L2.setPower(gamepad1.left_stick_y);
+            R1.setPower(gamepad1.right_stick_y);
+            R2.setPower(gamepad1.right_stick_y);
 
 /*            one.setPosition((gamepad1.left_stick_y+1)/2);
             two.setPosition((gamepad1.left_stick_y+1)/2);
@@ -82,6 +93,14 @@ public class TwelveTests extends LinearOpMode {
             five.setPosition((gamepad1.right_stick_y+1)/2);
             six.setPosition((gamepad1.right_stick_y+1)/2);*/
 
+
+
+
+            if(gamepad1.dpad_up){pickle+=.01;}
+            else if (gamepad1.dpad_down){pickle-=.01;}
+            pickle= Range.clip(pickle, .25, .65);
+            one.setPosition(pickle);
+            two.setPosition(1-pickle);
             Telemetry();
             waitForNextHardwareCycle();
         }
