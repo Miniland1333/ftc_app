@@ -42,10 +42,10 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class TwelveTests extends LinearOpMode {
     //Servo Twelve;
-    DcMotor L1;
-    DcMotor L2;
-    DcMotor R1;
-    DcMotor R2;
+    DcMotor LFront;
+    DcMotor LBack;
+    DcMotor RFront;
+    DcMotor RBack;
 
     Servo one;
     Servo two;
@@ -58,12 +58,12 @@ public class TwelveTests extends LinearOpMode {
 
     private void initialize(){
         //Twelve = hardwareMap.servo.get("Twelve");
-        L1 = hardwareMap.dcMotor.get("L1");
-        L2 = hardwareMap.dcMotor.get("L2");
-        R1 = hardwareMap.dcMotor.get("R1");
-        R2 = hardwareMap.dcMotor.get("R2");
-        R1.setDirection(DcMotor.Direction.REVERSE);
-        R2.setDirection(DcMotor.Direction.REVERSE);
+        LFront = hardwareMap.dcMotor.get("LFront");
+        LBack = hardwareMap.dcMotor.get("LBack");
+        RFront = hardwareMap.dcMotor.get("RFront");
+        RBack = hardwareMap.dcMotor.get("RBack");
+        LFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
+        LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
 
         one=hardwareMap.servo.get("one");
         two=hardwareMap.servo.get("two");
@@ -81,10 +81,10 @@ public class TwelveTests extends LinearOpMode {
 
         while (opModeIsActive()) {
             //Twelve.setPosition(((gamepad1.left_stick_y+1)/2));
-            L1.setPower(gamepad1.left_stick_y);
-            L2.setPower(gamepad1.left_stick_y);
-            R1.setPower(gamepad1.right_stick_y);
-            R2.setPower(gamepad1.right_stick_y);
+            LFront.setPower(gamepad1.left_stick_y);
+            LBack.setPower(gamepad1.left_stick_y);
+            RFront.setPower(gamepad1.right_stick_y);
+            RBack.setPower(gamepad1.right_stick_y);
 
 /*            one.setPosition((gamepad1.left_stick_y+1)/2);
             two.setPosition((gamepad1.left_stick_y+1)/2);
