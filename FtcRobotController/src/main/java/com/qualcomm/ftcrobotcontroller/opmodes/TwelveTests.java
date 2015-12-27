@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import java.lang.Math;
 
 /**
  * A Test Case
@@ -46,6 +47,8 @@ public class TwelveTests extends LinearOpMode {
     DcMotor LBack;
     DcMotor RFront;
     DcMotor RBack;
+    DcMotor Lift;
+    DcMotor Bucket;//Bucket Encoder is on LBack
 
     Servo one;
     Servo two;
@@ -54,7 +57,7 @@ public class TwelveTests extends LinearOpMode {
     Servo five;
     Servo six;*/
 
-    double pickle=.25;
+
 
     private void initialize(){
         //Twelve = hardwareMap.servo.get("Twelve");
@@ -62,12 +65,17 @@ public class TwelveTests extends LinearOpMode {
         LBack = hardwareMap.dcMotor.get("LBack");
         RFront = hardwareMap.dcMotor.get("RFront");
         RBack = hardwareMap.dcMotor.get("RBack");
+        Lift = hardwareMap.dcMotor.get("Lift");
+        Bucket = hardwareMap.dcMotor.get("Bucket");
+
         LFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
         LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
+        Lift.setDirection(DcMotor.Direction.REVERSE);   //Reversing based on default motor rotation direction
 
-        one=hardwareMap.servo.get("one");
+
+/*        one=hardwareMap.servo.get("one");
         two=hardwareMap.servo.get("two");
-/*        three=hardwareMap.servo.get("three");
+        three=hardwareMap.servo.get("three");
         four=hardwareMap.servo.get("four");
         five=hardwareMap.servo.get("five");
         six=hardwareMap.servo.get("six");*/
@@ -85,6 +93,7 @@ public class TwelveTests extends LinearOpMode {
             LBack.setPower(gamepad1.left_stick_y);
             RFront.setPower(gamepad1.right_stick_y);
             RBack.setPower(gamepad1.right_stick_y);
+            Lift.setPower(gamepad2.left_stick_y);
 
 /*            one.setPosition((gamepad1.left_stick_y+1)/2);
             two.setPosition((gamepad1.left_stick_y+1)/2);
@@ -94,20 +103,42 @@ public class TwelveTests extends LinearOpMode {
             six.setPosition((gamepad1.right_stick_y+1)/2);*/
 
 
+            TiltMotor();
 
 
-            if(gamepad1.dpad_up){pickle+=.01;}
-            else if (gamepad1.dpad_down){pickle-=.01;}
-            pickle= Range.clip(pickle, .25, .65);
-            one.setPosition(pickle);
-            two.setPosition(1-pickle);
+
+
             Telemetry();
             waitForNextHardwareCycle();
+        }
+        waitOneFullHardwareCycle();
+    }
+
+    public void TiltMotor(){
+        final int MAX_DEGREES = 25;
+        final int TOLERANCE_DEGREES = 5;
+        final int SLOW_RANGE = 15;
+
+        double motorValue = gamepad2.right_stick_x*MAX_DEGREES;
+        double currentValue= LBack.getCurrentPosition()/4f; //Bucket Encoder is on LBack
+        double difference = Math.abs(motorValue-currentValue);
+        if (difference<=TOLERANCE_DEGREES){Bucket.setPower(0);
+        }
+        else if (motorValue>currentValue){
+            if (difference<=SLOW_RANGE) {Bucket.setPower(-.1);}
+            else {Bucket.setPower(-.2);}
+        }
+        else{
+            if (difference<=SLOW_RANGE){Bucket.setPower(.1);}
+            else {Bucket.setPower(.2);}
         }
     }
 
     public void Telemetry(){
-        telemetry.addData("Value",gamepad1.left_stick_y);
-        telemetry.addData("Value2",gamepad1.right_stick_y);
+        telemetry.addData("Left",gamepad1.left_stick_y);
+        telemetry.addData("Right",gamepad1.right_stick_y);
+        telemetry.addData("Lift",gamepad2.left_stick_y);
+        telemetry.addData("Bucket",LBack.getCurrentPosition()/4);
+        telemetry.addData("Bucket joystick", gamepad2.right_stick_x);
     }
 }
