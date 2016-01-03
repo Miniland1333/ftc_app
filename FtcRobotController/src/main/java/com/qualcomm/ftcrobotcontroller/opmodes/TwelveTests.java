@@ -34,7 +34,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
+
 import java.lang.Math;
 
 /**
@@ -47,7 +47,8 @@ public class TwelveTests extends LinearOpMode {
     DcMotor LBack;
     DcMotor RFront;
     DcMotor RBack;
-    DcMotor Lift;
+    DcMotor FLift;
+    DcMotor BLift;
     DcMotor Bucket;//Bucket Encoder is on LBack
 
     Servo one;
@@ -65,12 +66,13 @@ public class TwelveTests extends LinearOpMode {
         LBack = hardwareMap.dcMotor.get("LBack");
         RFront = hardwareMap.dcMotor.get("RFront");
         RBack = hardwareMap.dcMotor.get("RBack");
-        Lift = hardwareMap.dcMotor.get("Lift");
+        FLift = hardwareMap.dcMotor.get("FLift");
         Bucket = hardwareMap.dcMotor.get("Bucket");
+        BLift = hardwareMap.dcMotor.get("BLift");
 
         LFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
         LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
-        Lift.setDirection(DcMotor.Direction.REVERSE);   //Reversing based on default motor rotation direction
+        FLift.setDirection(DcMotor.Direction.REVERSE);   //Reversing based on default motor rotation direction
 
 
 /*        one=hardwareMap.servo.get("one");
@@ -93,7 +95,7 @@ public class TwelveTests extends LinearOpMode {
             LBack.setPower(gamepad1.left_stick_y);
             RFront.setPower(gamepad1.right_stick_y);
             RBack.setPower(gamepad1.right_stick_y);
-            Lift.setPower(gamepad2.left_stick_y);
+            FLift.setPower(gamepad2.left_stick_y);
 
 /*            one.setPosition((gamepad1.left_stick_y+1)/2);
             two.setPosition((gamepad1.left_stick_y+1)/2);
@@ -104,7 +106,7 @@ public class TwelveTests extends LinearOpMode {
 
 
             TiltMotor();
-
+            BLift();
 
 
 
@@ -114,7 +116,7 @@ public class TwelveTests extends LinearOpMode {
         waitOneFullHardwareCycle();
     }
 
-    public void TiltMotor(){
+    private void TiltMotor(){
         final int MAX_DEGREES = 25;
         final int TOLERANCE_DEGREES = 5;
         final int SLOW_RANGE = 15;
@@ -134,11 +136,14 @@ public class TwelveTests extends LinearOpMode {
         }
     }
 
-    public void Telemetry(){
+    private void BLift(){
+        if (gamepad2.dpad_up){BLift.setPower(.5);}
+        else if (gamepad2.dpad_down){BLift.setPower(-.5);}
+        else{BLift.setPower(0);}
+    }
+    private void Telemetry(){
         telemetry.addData("Left",gamepad1.left_stick_y);
         telemetry.addData("Right",gamepad1.right_stick_y);
-        telemetry.addData("Lift",gamepad2.left_stick_y);
         telemetry.addData("Bucket",LBack.getCurrentPosition()/4);
-        telemetry.addData("Bucket joystick", gamepad2.right_stick_x);
     }
 }
