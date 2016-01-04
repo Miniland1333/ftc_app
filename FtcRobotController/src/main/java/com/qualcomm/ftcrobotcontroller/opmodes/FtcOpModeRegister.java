@@ -102,7 +102,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
         //manager.register("LinearTeleTest", LinearTeleTest.class);
         manager.register("TwelveTests", TwelveTests.class);
-        manager.register("Colin_Something",Colin_Something.class);
+        manager.register("Teleop2016", Teleop2016.class);
         manager.register("Skynet", Skynet.class);
 }
 }
