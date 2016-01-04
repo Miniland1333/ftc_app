@@ -1,5 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,14 +14,31 @@ public class Skynet extends LinearOpMode {
     DcMotor RBack;
     DcMotor LFront;
     DcMotor LBack;
-    private void Doctor(){
-        RFront=hardwareMap.dcMotor.get("RFront");
-        RBack=hardwareMap.dcMotor.get("RBack");
-        LFront=hardwareMap.dcMotor.get("LFront");
-        LBack=hardwareMap.dcMotor.get("LBack");
+    DcMotor BLift;
+    DcMotor FLift;
+    DcMotor Bucket;
+    Servo LClaw;
+    Servo RClaw;
+
+    private void Doctor() {
+        RFront = hardwareMap.dcMotor.get("RFront");
+        RBack = hardwareMap.dcMotor.get("RBack");
+        LFront = hardwareMap.dcMotor.get("LFront");
+        LBack = hardwareMap.dcMotor.get("LBack");
+        BLift = hardwareMap.dcMotor.get("BLift");
+        FLift = hardwareMap.dcMotor.get("FLift");
+        Bucket = hardwareMap.dcMotor.get("Bucket");
+        //sets up DC motors
+        LClaw = hardwareMap.servo.get("LClaw");
+        RClaw = hardwareMap.servo.get("RClaw");
+        //sets up servos
         RBack.setDirection(DcMotor.Direction.REVERSE);
         RFront.setDirection(DcMotor.Direction.REVERSE);
-        //Sets things up
+        Bucket.setDirection(DcMotor.Direction.REVERSE);
+        //inverts things that need inverting
+
+        //sets up servos properly with math
+                                             //Sets things up
     }
     @Override
     public void runOpMode() throws InterruptedException {
