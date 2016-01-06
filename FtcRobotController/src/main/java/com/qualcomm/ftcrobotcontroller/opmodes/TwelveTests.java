@@ -42,7 +42,6 @@ import java.lang.Math;
  * Created by Staff on 9/13/2015.
  */
 public class TwelveTests extends LinearOpMode {
-    //Servo Twelve;
     DcMotor LFront;
     DcMotor LBack;
     DcMotor RFront;
@@ -50,16 +49,20 @@ public class TwelveTests extends LinearOpMode {
     DcMotor FLift;
     DcMotor BLift;
     DcMotor Bucket;//Bucket Encoder is on LBack
+    Boolean isClawOpen;
 
-    Servo one;
+    Servo LClaw;
+    Servo RClaw;
+
+/*    Servo one;
     Servo two;
-/*    Servo three;
+    Servo three;
     Servo four;
     Servo five;
     Servo six;*/
 
 
-
+    //Initalization Code
     private void initialize(){
         //Twelve = hardwareMap.servo.get("Twelve");
         LFront = hardwareMap.dcMotor.get("LFront");
@@ -74,6 +77,9 @@ public class TwelveTests extends LinearOpMode {
         LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
         FLift.setDirection(DcMotor.Direction.REVERSE);   //Reversing based on default motor rotation direction
 
+        LClaw = hardwareMap.servo.get("LClaw");
+        RClaw = hardwareMap.servo.get("RClaw");
+
 
 /*        one=hardwareMap.servo.get("one");
         two=hardwareMap.servo.get("two");
@@ -82,15 +88,20 @@ public class TwelveTests extends LinearOpMode {
         five=hardwareMap.servo.get("five");
         six=hardwareMap.servo.get("six");*/
 
+        //Motor and Servo Initialization
+        makeClawOpen();
+
     }
 
+
+    //Starting point for OpModes
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
 
+        //Main Loop
         while (opModeIsActive()) {
-            //Twelve.setPosition(((gamepad1.left_stick_y+1)/2));
             LFront.setPower(gamepad1.left_stick_y);
             LBack.setPower(gamepad1.left_stick_y);
             RFront.setPower(gamepad1.right_stick_y);
@@ -104,10 +115,10 @@ public class TwelveTests extends LinearOpMode {
             five.setPosition((gamepad1.right_stick_y+1)/2);
             six.setPosition((gamepad1.right_stick_y+1)/2);*/
 
-
+            //Special Functions
             TiltMotor();
             BLift();
-
+            Claw();
 
 
             Telemetry();
@@ -116,6 +127,7 @@ public class TwelveTests extends LinearOpMode {
         waitOneFullHardwareCycle();
     }
 
+    //Added functionality for Bucket Motor tilt
     private void TiltMotor(){
         final int MAX_DEGREES = 25;
         final int TOLERANCE_DEGREES = 5;
@@ -136,11 +148,36 @@ public class TwelveTests extends LinearOpMode {
         }
     }
 
+    //Back Lift controls
     private void BLift(){
         if (gamepad2.dpad_up){BLift.setPower(.5);}
         else if (gamepad2.dpad_down){BLift.setPower(-.5);}
-        else{BLift.setPower(0);}
+        else{BLift.setPowerFloat();}
     }
+
+    //Claw Servo controls
+    private void Claw() throws InterruptedException {  //This class control the toggle to open/close the Claw
+        if (gamepad2.a) {
+            do {
+                waitForNextHardwareCycle();
+            } while (gamepad2.a);
+            if (isClawOpen) {
+                makeClawClosed();
+            } else {
+                makeClawOpen();
+            }
+        }
+    }
+    private void makeClawOpen(){
+        RClaw.setPosition(.4);
+        LClaw.setPosition(.6);
+        isClawOpen = true;}
+    private void makeClawClosed(){
+        RClaw.setPosition(.6);
+        LClaw.setPosition(.4);
+        isClawOpen = false;}
+
+    //Customize telemetry data
     private void Telemetry(){
         telemetry.addData("Left",gamepad1.left_stick_y);
         telemetry.addData("Right",gamepad1.right_stick_y);
