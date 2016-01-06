@@ -54,7 +54,7 @@ public class JamesTeleopProgram extends LinearOpMode{
             //provides control for driver
             BLift.setPower(gamepad2.right_stick_y);
             if (Math.abs(gamepad2.right_stick_y)>.2){
-                FLift.setPower(gamepad2.right_stick_y*0.4);
+                FLift.setPower(gamepad2.right_stick_y*0.35);
             }
             else{
                 Flift.setPowerFloat();
