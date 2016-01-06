@@ -3,6 +3,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import java.lang.Math;
 
 /**
  * Created by Staff on 1/4/2016.
@@ -52,7 +53,12 @@ public class JamesTeleopProgram extends LinearOpMode{
             RBack.setPower(gamepad1.right_stick_y);
             //provides control for driver
             BLift.setPower(gamepad2.right_stick_y);
-            FLift.setPower(gamepad2.right_stick_y*0.4);
+            if (Math.abs(gamepad2.right_stick_y)>.2){
+                FLift.setPower(gamepad2.right_stick_y*0.35);
+            }
+            else{
+                Flift.setPowerFloat();
+            }
             Tilt();
             BumperToggle();
             //provides control for co-pilot
