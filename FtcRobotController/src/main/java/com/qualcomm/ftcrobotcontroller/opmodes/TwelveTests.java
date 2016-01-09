@@ -49,7 +49,6 @@ import java.util.ArrayList;
  * A Test Case
  * Created by Staff on 9/13/2015.
  */
-@SuppressWarnings("ConstantConditions")
 public class TwelveTests extends LinearOpMode {
     DcMotor LFront;
     DcMotor LBack;
@@ -92,7 +91,6 @@ public class TwelveTests extends LinearOpMode {
         LFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
         LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
         FLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
-        BLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
 
         LClaw = hardwareMap.servo.get("LClaw");
         RClaw = hardwareMap.servo.get("RClaw");
@@ -116,6 +114,7 @@ public class TwelveTests extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
+        //noinspection ConstantConditions
         if (STATE ==2){Open();}
 
         //Main Loop
@@ -154,6 +153,7 @@ public class TwelveTests extends LinearOpMode {
             Telemetry();
             waitForNextHardwareCycle();
         }
+        //noinspection ConstantConditions
         if (STATE==1){Save();}
         waitOneFullHardwareCycle();
 
@@ -203,11 +203,13 @@ public class TwelveTests extends LinearOpMode {
     private void makeClawOpen(){
         RClaw.setPosition(.3);
         LClaw.setPosition(.7);
-        isClawOpen = true;}
+        isClawOpen = true;
+    }
     private void makeClawClosed(){
         RClaw.setPosition(.7);
         LClaw.setPosition(.3);
-        isClawOpen = false;}
+        isClawOpen = false;
+    }
 
     //Autonomous Record/Save and Play/Open
     private void Record(){
@@ -222,7 +224,8 @@ public class TwelveTests extends LinearOpMode {
             outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
             for (AutoGamepad element : Recording) {
                 outputStream.write(element.toByteArray());
-                outputStream.write((byte)6286);
+                // TODO: 1/9/2016 Create a delimiter
+                outputStream.write((byte)6286); //Delimiter?
             }
             outputStream.close();
         } catch (Exception e) {
