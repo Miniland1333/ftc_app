@@ -82,7 +82,7 @@ public class Teleop2016 extends LinearOpMode {
                 FLift.setPower(-(.5));
             } //Hold down the B-button to move the front lift down
             else{
-                FLift.setPower(0);
+                FLift.setPowerFloat();
             }
             //Remember that Y and B make Front Lift move if you need to move it
 
