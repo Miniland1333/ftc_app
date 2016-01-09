@@ -31,16 +31,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import android.content.Context;
+
+import com.qualcomm.ftcrobotcontroller.Extras.AutoGamepad;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.Math;
+import java.util.ArrayList;
 
 /**
  * A Test Case
  * Created by Staff on 9/13/2015.
  */
+@SuppressWarnings("ConstantConditions")
 public class TwelveTests extends LinearOpMode {
     DcMotor LFront;
     DcMotor LBack;
@@ -49,10 +58,17 @@ public class TwelveTests extends LinearOpMode {
     DcMotor FLift;
     DcMotor BLift;
     DcMotor Bucket;//Bucket Encoder is on LBack
-    Boolean isClawOpen;
 
     Servo LClaw;
     Servo RClaw;
+
+    Boolean isClawOpen;
+    int index =0;
+    ArrayList<AutoGamepad>Recording=new ArrayList<AutoGamepad>();
+    protected Context context;
+    final int STATE = 0;// 0=None, 1=Record, 2=Play
+    final String filename = "Auto";
+
 
 /*    Servo one;
     Servo two;
@@ -75,7 +91,8 @@ public class TwelveTests extends LinearOpMode {
 
         LFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
         LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
-        FLift.setDirection(DcMotor.Direction.REVERSE);   //Reversing based on default motor rotation direction
+        FLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
+        BLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
 
         LClaw = hardwareMap.servo.get("LClaw");
         RClaw = hardwareMap.servo.get("RClaw");
@@ -99,14 +116,27 @@ public class TwelveTests extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
+        if (STATE ==2){Open();}
 
         //Main Loop
         while (opModeIsActive()) {
+
+            switch (STATE) {
+                case 0:
+                    break;
+                case 1:
+                    Record();
+                    break;
+                case 2:
+                    Play();
+                    break;
+            }
+
             LFront.setPower(gamepad1.left_stick_y);
             LBack.setPower(gamepad1.left_stick_y);
             RFront.setPower(gamepad1.right_stick_y);
             RBack.setPower(gamepad1.right_stick_y);
-            FLift.setPower(gamepad2.left_stick_y);
+            BLift.setPower(gamepad2.left_stick_y);
 
 /*            one.setPosition((gamepad1.left_stick_y+1)/2);
             two.setPosition((gamepad1.left_stick_y+1)/2);
@@ -117,14 +147,16 @@ public class TwelveTests extends LinearOpMode {
 
             //Special Functions
             TiltMotor();
-            BLift();
+            FLift();
             Claw();
 
 
             Telemetry();
             waitForNextHardwareCycle();
         }
+        if (STATE==1){Save();}
         waitOneFullHardwareCycle();
+
     }
 
     //Added functionality for Bucket Motor tilt
@@ -149,10 +181,10 @@ public class TwelveTests extends LinearOpMode {
     }
 
     //Back Lift controls
-    private void BLift(){
-        if (gamepad2.dpad_up){BLift.setPower(.5);}
-        else if (gamepad2.dpad_down){BLift.setPower(-.5);}
-        else{BLift.setPowerFloat();}
+    private void FLift(){
+        if (gamepad2.dpad_up){FLift.setPower(.5);}
+        else if (gamepad2.dpad_down){FLift.setPower(-.5);}
+        else{FLift.setPowerFloat();}
     }
 
     //Claw Servo controls
@@ -169,15 +201,67 @@ public class TwelveTests extends LinearOpMode {
         }
     }
     private void makeClawOpen(){
-        RClaw.setPosition(.4);
-        LClaw.setPosition(.6);
+        RClaw.setPosition(.3);
+        LClaw.setPosition(.7);
         isClawOpen = true;}
     private void makeClawClosed(){
-        RClaw.setPosition(.6);
-        LClaw.setPosition(.4);
+        RClaw.setPosition(.7);
+        LClaw.setPosition(.3);
         isClawOpen = false;}
 
-    //Customize telemetry data
+    //Autonomous Record/Save and Play/Open
+    private void Record(){
+        AutoGamepad Gamepad1 = new AutoGamepad(gamepad1);
+        AutoGamepad Gamepad2 = new AutoGamepad(gamepad2);
+        Recording.add(Gamepad1);
+        Recording.add(Gamepad2);
+    }
+    private void Save() {
+        FileOutputStream outputStream;
+        try {
+            outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            for (AutoGamepad element : Recording) {
+                outputStream.write(element.toByteArray());
+                outputStream.write((byte)6286);
+            }
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void Play(){
+                gamepad1 = Recording.get(index);
+                index++;
+                gamepad2 = Recording.get(index);
+                index++;
+    }
+    private void Open(){
+        FileInputStream inputStream;
+        ByteArrayBuffer mReadBuffer=new ByteArrayBuffer(0);
+        byte[] Parse;
+        ArrayList<byte[]>Almost=new ArrayList<byte[]>();
+        try {
+            inputStream = context.openFileInput("Auto");
+            for (int i=0;i<inputStream.available();i++){
+                mReadBuffer.append(inputStream.read());
+            }
+            Parse = mReadBuffer.toByteArray();
+            mReadBuffer.clear();
+
+            // TODO: 1/8/2016 Add in code to parse bytearray and create gamepad objects
+
+            for (byte[] element: Almost) {
+                Recording.add(new AutoGamepad(element));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+        //Customize telemetry data
     private void Telemetry(){
         telemetry.addData("Left",gamepad1.left_stick_y);
         telemetry.addData("Right",gamepad1.right_stick_y);
