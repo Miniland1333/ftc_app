@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.RobotLog;
 
+import java.io.Serializable;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 
@@ -11,7 +12,7 @@ import java.nio.ByteBuffer;
  * Created by Henry on 1/8/2016.
  * Replicates an instance of a gamepad values.
  */
-public class AutoGamepad extends Gamepad {
+public class AutoGamepad extends Gamepad implements Serializable{
     public float left_stick_x;
     public float left_stick_y;
     public float right_stick_x;
@@ -146,4 +147,3 @@ public class AutoGamepad extends Gamepad {
             this.right_bumper = (var5 & 1) != 0;
     }
 }
-
