@@ -71,6 +71,7 @@ public class TwelveTests extends LinearOpMode {
     final int STATE = 1;// 0=None, 1=Record, 2=Play
     final String filename = "Auto.txt";
     private ElapsedTime recordTime = new ElapsedTime();
+    private boolean prevState = false;
 
 
 /*    Servo one;
@@ -132,7 +133,7 @@ public class TwelveTests extends LinearOpMode {
                     Record();
                     break;
             }
-
+            //ANY CHANGES MUST ALSO BE ADDED TO TwelveTestAuto AS WELL!!!
             LFront.setPower(gamepad1.left_stick_y);
             LBack.setPower(gamepad1.left_stick_y);
             RFront.setPower(gamepad1.right_stick_y);
@@ -190,10 +191,9 @@ public class TwelveTests extends LinearOpMode {
 
     //Claw Servo controls
     private void Claw() {  //This class control the toggle to open/close the Claw
-        if (gamepad2.a) {
-            //noinspection StatementWithEmptyBody,ConstantConditions
-            do {
-            } while (gamepad2.a);
+        if (!gamepad2.a){prevState=false;}
+        if (gamepad2.a&&!prevState) {
+            prevState=true;
             if (isClawOpen) {
                 makeClawClosed();
             } else {
@@ -221,7 +221,6 @@ public class TwelveTests extends LinearOpMode {
             AutoGamepad Gamepad2 = new AutoGamepad(gamepad2);
             Recording.add(Gamepad1);
             Recording.add(Gamepad2);
-            Log.i("Henry", String.valueOf(Gamepad2.a));
         }
     }
     private void Save() {

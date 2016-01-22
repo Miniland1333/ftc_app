@@ -39,6 +39,7 @@ public class TwelveTestAuto extends LinearOpMode {
     private ElapsedTime recordTime = new ElapsedTime();
     AutoGamepad Gamepad1 = new AutoGamepad();
     AutoGamepad Gamepad2 = new AutoGamepad();
+    private boolean prevState = false;
 
 
     //Initalization Code
@@ -136,16 +137,16 @@ public class TwelveTestAuto extends LinearOpMode {
 
     //Claw Servo controls
     private void Claw() {  //This class control the toggle to open/close the Claw
-        if (gamepad2.a) {
-            //noinspection StatementWithEmptyBody,ConstantConditions
-            do {
-            } while (gamepad2.a);
+        if (!Gamepad2.a){prevState=false;}
+        if (Gamepad2.a&&!prevState) {
+            prevState=true;
             if (isClawOpen) {
                 makeClawClosed();
             } else {
                 makeClawOpen();
             }
         }
+
     }
     private void makeClawOpen(){
         RClaw.setPosition(.3);
@@ -167,7 +168,6 @@ public class TwelveTestAuto extends LinearOpMode {
             index++;
             Gamepad2 = Recording.get(index);
             index++;
-            Log.v("Henry",Gamepad2.toString());
         }
     }
     private void Open() {
@@ -195,6 +195,6 @@ public class TwelveTestAuto extends LinearOpMode {
         telemetry.addData("Left",Gamepad1.left_stick_y);
         telemetry.addData("Right",Gamepad1.right_stick_y);
         telemetry.addData("Bucket",LBack.getCurrentPosition()/4);
-        telemetry.addData("Record size",Recording.size());
+        telemetry.addData("Record size",String.format("%d/%d",index,Recording.size()));
     }
 }
