@@ -1,34 +1,3 @@
-/* Copyright (c) 2015 Qualcomm Technologies Inc
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Qualcomm Technologies Inc nor the names of its contributors
-may be used to endorse or promote products derived from this software without
-specific prior written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
-
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import android.content.Context;
@@ -45,14 +14,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.Math;
 import java.util.ArrayList;
 
 /**
- * A Test Case
- * Created by Staff on 9/13/2015.
+ * Created by Henry on 1/21/2016.
  */
-public class TwelveTests extends LinearOpMode {
+public class TwelveTestAuto extends LinearOpMode {
     DcMotor LFront;
     DcMotor LBack;
     DcMotor RFront;
@@ -66,24 +33,16 @@ public class TwelveTests extends LinearOpMode {
 
     Boolean isClawOpen;
     int index =0;
-    ArrayList<AutoGamepad>Recording=new ArrayList<AutoGamepad>();
+    ArrayList<AutoGamepad> Recording=new ArrayList<AutoGamepad>();
     protected Context context;
-    final int STATE = 1;// 0=None, 1=Record, 2=Play
     final String filename = "Auto.txt";
     private ElapsedTime recordTime = new ElapsedTime();
-
-
-/*    Servo one;
-    Servo two;
-    Servo three;
-    Servo four;
-    Servo five;
-    Servo six;*/
+    AutoGamepad Gamepad1 = new AutoGamepad();
+    AutoGamepad Gamepad2 = new AutoGamepad();
 
 
     //Initalization Code
     private void initialize(){
-        try {waitOneFullHardwareCycle();}catch (InterruptedException ignore){}
         LFront = hardwareMap.dcMotor.get("LFront");
         LBack = hardwareMap.dcMotor.get("LBack");
         RFront = hardwareMap.dcMotor.get("RFront");
@@ -112,39 +71,30 @@ public class TwelveTests extends LinearOpMode {
         makeClawOpen();
 
     }
-
-
     //Starting point for OpModes
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
         recordTime.reset();
+        Open();
 
         //Main Loop
         while (opModeIsActive()) {
+            Play();
 
-            switch (STATE) {
-                //noinspection ConstantConditions
-                case 0:
-                    break;
-                case 1:
-                    Record();
-                    break;
-            }
+            LFront.setPower(Gamepad1.left_stick_y);
+            LBack.setPower(Gamepad1.left_stick_y);
+            RFront.setPower(Gamepad1.right_stick_y);
+            RBack.setPower(Gamepad1.right_stick_y);
+            BLift.setPower(-(Gamepad2.left_stick_y));
 
-            LFront.setPower(gamepad1.left_stick_y);
-            LBack.setPower(gamepad1.left_stick_y);
-            RFront.setPower(gamepad1.right_stick_y);
-            RBack.setPower(gamepad1.right_stick_y);
-            BLift.setPower(-(gamepad2.left_stick_y));
-
-/*            one.setPosition((gamepad1.left_stick_y+1)/2);
-            two.setPosition((gamepad1.left_stick_y+1)/2);
-            three.setPosition((gamepad1.left_stick_y+1)/2);
-            four.setPosition((gamepad1.right_stick_y+1)/2);
-            five.setPosition((gamepad1.right_stick_y+1)/2);
-            six.setPosition((gamepad1.right_stick_y+1)/2);*/
+/*            one.setPosition((Gamepad1.left_stick_y+1)/2);
+            two.setPosition((Gamepad1.left_stick_y+1)/2);
+            three.setPosition((Gamepad1.left_stick_y+1)/2);
+            four.setPosition((Gamepad1.right_stick_y+1)/2);
+            five.setPosition((Gamepad1.right_stick_y+1)/2);
+            six.setPosition((Gamepad1.right_stick_y+1)/2);*/
 
             //Special Functions
             TiltMotor();
@@ -154,10 +104,6 @@ public class TwelveTests extends LinearOpMode {
 
             Telemetry();
         }
-        //noinspection ConstantConditions
-        if (STATE==1){Save();}
-        waitOneFullHardwareCycle();
-
     }
 
     //Added functionality for Bucket Motor tilt
@@ -166,7 +112,7 @@ public class TwelveTests extends LinearOpMode {
         final int TOLERANCE_DEGREES = 5;
         final int SLOW_RANGE = 15;
 
-        double motorValue = gamepad2.right_stick_x*MAX_DEGREES;
+        double motorValue = Gamepad2.right_stick_x*MAX_DEGREES;
         double currentValue= LBack.getCurrentPosition()/4f; //Bucket Encoder is on LBack
         double difference = Math.abs(motorValue-currentValue);
         if (difference<=TOLERANCE_DEGREES){Bucket.setPower(0);
@@ -183,8 +129,8 @@ public class TwelveTests extends LinearOpMode {
 
     //Back Lift controls
     private void FLift(){
-        if (gamepad2.dpad_up){FLift.setPower(.5);}
-        else if (gamepad2.dpad_down){FLift.setPower(-.5);}
+        if (Gamepad2.dpad_up){FLift.setPower(.5);}
+        else if (Gamepad2.dpad_down){FLift.setPower(-.5);}
         else{FLift.setPowerFloat();}
     }
 
@@ -200,7 +146,6 @@ public class TwelveTests extends LinearOpMode {
                 makeClawOpen();
             }
         }
-
     }
     private void makeClawOpen(){
         RClaw.setPosition(.3);
@@ -213,39 +158,16 @@ public class TwelveTests extends LinearOpMode {
         isClawOpen = false;
     }
 
-    //Autonomous Record/Save and Play/Open
-    private void Record () {
-        if (recordTime.time()>= .1) {
-            recordTime.reset();
-            AutoGamepad Gamepad1 = new AutoGamepad(gamepad1);
-            AutoGamepad Gamepad2 = new AutoGamepad(gamepad2);
-            Recording.add(Gamepad1);
-            Recording.add(Gamepad2);
-            Log.i("Henry", String.valueOf(Gamepad2.a));
-        }
-    }
-    private void Save() {
-        try {
-            FileOutputStream outStream;
-            ObjectOutputStream out;
-            outStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            out = new ObjectOutputStream(outStream);
-            out.writeObject(Recording);
-            outStream.close();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d("Henry", "Saved Successfully");
-        recordTime.log("Henry");
-    }
+    //Autonomous Play/Open
+
     private void Play() {
         if (recordTime.time()>= .1 && index <= Recording.size() - 2) {
             recordTime.reset();
-            gamepad1 = Recording.get(index);
+            Gamepad1 = Recording.get(index);
             index++;
-            gamepad2 = Recording.get(index);
+            Gamepad2 = Recording.get(index);
             index++;
+            Log.v("Henry",Gamepad2.toString());
         }
     }
     private void Open() {
@@ -270,8 +192,8 @@ public class TwelveTests extends LinearOpMode {
 
     //Customize telemetry data
     private void Telemetry(){
-        telemetry.addData("Left",gamepad1.left_stick_y);
-        telemetry.addData("Right",gamepad1.right_stick_y);
+        telemetry.addData("Left",Gamepad1.left_stick_y);
+        telemetry.addData("Right",Gamepad1.right_stick_y);
         telemetry.addData("Bucket",LBack.getCurrentPosition()/4);
         telemetry.addData("Record size",Recording.size());
     }

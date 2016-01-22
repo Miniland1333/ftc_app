@@ -59,6 +59,30 @@ public class AutoGamepad extends Gamepad implements Serializable{
         this.right_trigger = gamepad.right_trigger;
     }
 
+    public AutoGamepad(){
+        this.left_stick_x = 0.0F;
+        this.left_stick_y = 0.0F;
+        this.right_stick_x = 0.0F;
+        this.right_stick_y = 0.0F;
+        this.dpad_up = false;
+        this.dpad_down = false;
+        this.dpad_left = false;
+        this.dpad_right = false;
+        this.a = false;
+        this.b = false;
+        this.x = false;
+        this.y = false;
+        this.guide = false;
+        this.start = false;
+        this.back = false;
+        this.left_bumper = false;
+        this.right_bumper = false;
+        this.left_stick_button = false;
+        this.right_stick_button = false;
+        this.left_trigger = 0.0F;
+        this.right_trigger = 0.0F;
+    }
+
     public AutoGamepad(byte[] in){
         ByteBuffer var2 = ByteBuffer.wrap(in);
         this.left_stick_x = var2.getFloat();

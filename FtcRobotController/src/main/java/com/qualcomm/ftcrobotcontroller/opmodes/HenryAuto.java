@@ -23,8 +23,7 @@ public class HenryAuto extends LinearOpMode{
 
 
     //Initalization Code
-    private void initialize(){
-        //Twelve = hardwareMap.servo.get("Twelve");
+    private void initialize() throws InterruptedException {
         LFront = hardwareMap.dcMotor.get("LFront");
         LBack = hardwareMap.dcMotor.get("LBack");
         RFront = hardwareMap.dcMotor.get("RFront");
@@ -36,6 +35,7 @@ public class HenryAuto extends LinearOpMode{
         RFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
         RBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
         FLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
+        BLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
 
         LClaw = hardwareMap.servo.get("LClaw");
         RClaw = hardwareMap.servo.get("RClaw");
@@ -49,31 +49,47 @@ public class HenryAuto extends LinearOpMode{
         six=hardwareMap.servo.get("six");*/
 
         //Motor and Servo Initialization
+        telemetry.addData("Task", "Init");
         makeClawOpen();
-
+        waitOneFullHardwareCycle();
     }
     @Override
     public void runOpMode() throws InterruptedException{
         initialize();
         waitForStart();
         Bucket.setPower(0);
-        task(.5, .5, 1100, "Forward");
-        task(-.5, .5, 500, "Turn Left");
-        task(.5, .5, 1100, "Forward");
-        task(-.5, .5, 425, "Turn Left");
-        task(.20, .20, 600, "Forward");
-        task(0, 0, 2000,"Wait");
-        makeClawClosed();
-        telemetry.addData("Task", "Dump");
+        makeClawDown();
+        Lift(-.5, 730);
+        BLift.setPower(0);
+        Lift(.5, 100);
+        BLift.setPower(0);
+        telemetry.addData("Task", "Down");
+        task(.5, .5, 2000, "Forward1");
+        task(.5, -.5, 900, "Turn Left1");
+        task(.5, .5, 1200, "Forward2");
+        task(.5, -.5, 900, "Turn Left2");
+        task(0, 0, 0, "Wait1");
+        /*RClaw.setPosition(.3);
+        Lift(.5,1000);
+        BLift.setPower(0);
+        task(.20, .20, 700, "Forward3");
+        task(0, 0, 1000, "Wait2");
+        makeClawClosed();*/
 
 
 
     }
 
-    private void makeClawOpen(){
-        RClaw.setPosition(.3);
+    private void makeClawOpen() throws InterruptedException{
+        waitOneFullHardwareCycle();
+        RClaw.setPosition(0);
         LClaw.setPosition(.7);
         isClawOpen = true;
+        telemetry.addData("Task", "Inside");
+    }
+    private void makeClawDown(){
+        RClaw.setPosition(0);
+        LClaw.setPosition(.3);
     }
     private void makeClawClosed(){
         RClaw.setPosition(.7);
@@ -86,13 +102,27 @@ public class HenryAuto extends LinearOpMode{
         RBack.setPower(right);
         RFront.setPower(right);
         sleep(time);
+        STOP();
     }
     private void task (double left, double right, long time,String Message) throws InterruptedException{
         LBack.setPower(left);
         LFront.setPower(left);
         RBack.setPower(right);
         RFront.setPower(right);
-        sleep(time);
         telemetry.addData("Task", Message);
+        sleep(time);
+        STOP();
+    }
+    private void STOP() throws InterruptedException{
+        LBack.setPower(0);
+        LFront.setPower(0);
+        RBack.setPower(0);
+        RFront.setPower(0);
+        telemetry.addData("Task", "STOP");
+        sleep(1500);
+    }
+    private void Lift (double power, long time) throws InterruptedException{
+        BLift.setPower(power);
+        sleep(time);
     }
 }
