@@ -72,6 +72,8 @@ public class TwelveTests extends LinearOpMode {
     final String filename = "Auto.txt";
     private ElapsedTime recordTime = new ElapsedTime();
     private boolean prevState = false;
+    FileOutputStream outStream;
+    ObjectOutputStream out;
 
 
 /*    Servo one;
@@ -101,6 +103,10 @@ public class TwelveTests extends LinearOpMode {
         RClaw = hardwareMap.servo.get("RClaw");
 
         context = FtcRobotControllerActivity.mainContext;
+        try{
+            outStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            out = new ObjectOutputStream(outStream);
+        }catch (Exception e) {e.printStackTrace();}
 /*        one=hardwareMap.servo.get("one");
         two=hardwareMap.servo.get("two");
         three=hardwareMap.servo.get("three");
@@ -216,27 +222,25 @@ public class TwelveTests extends LinearOpMode {
     //Autonomous Record/Save and Play/Open
     private void Record () {
         if (recordTime.time()>= .1) {
-            recordTime.reset();
-            AutoGamepad Gamepad1 = new AutoGamepad(gamepad1);
-            AutoGamepad Gamepad2 = new AutoGamepad(gamepad2);
-            Recording.add(Gamepad1);
-            Recording.add(Gamepad2);
+            try {
+                recordTime.reset();
+                AutoGamepad Gamepad1 = new AutoGamepad(gamepad1);
+                out.writeObject(Gamepad1);
+                Recording.add(Gamepad1);
+                AutoGamepad Gamepad2 = new AutoGamepad(gamepad2);
+                Recording.add(Gamepad2);
+                out.writeObject(Gamepad2);
+            } catch (Exception e) {e.printStackTrace();}
         }
     }
     private void Save() {
         try {
-            FileOutputStream outStream;
-            ObjectOutputStream out;
-            outStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            out = new ObjectOutputStream(outStream);
-            out.writeObject(Recording);
             outStream.close();
             out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d("Henry", "Saved Successfully");
-        recordTime.log("Henry");
+        Log.i("Henry", String.format("Saved Successfully %d",Recording.size()));
     }
     private void Play() {
         if (recordTime.time()>= .1 && index <= Recording.size() - 2) {
@@ -269,9 +273,9 @@ public class TwelveTests extends LinearOpMode {
 
     //Customize telemetry data
     private void Telemetry(){
-        telemetry.addData("Left",gamepad1.left_stick_y);
-        telemetry.addData("Right",gamepad1.right_stick_y);
-        telemetry.addData("Bucket",LBack.getCurrentPosition()/4);
-        telemetry.addData("Record size",Recording.size());
+        telemetry.addData("1Left",gamepad1.left_stick_y);
+        telemetry.addData("2Right",gamepad1.right_stick_y);
+        telemetry.addData("3Bucket",LBack.getCurrentPosition()/4);
+        telemetry.addData("4Record size", Recording.size());
     }
 }

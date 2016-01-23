@@ -176,12 +176,12 @@ public class TwelveTestAuto extends LinearOpMode {
             ObjectInputStream in;
             inStream = context.openFileInput(filename);
             in = new ObjectInputStream(inStream);
-            Recording = (ArrayList<AutoGamepad>) in.readObject();
+            while(inStream.available()>0){Recording.add((AutoGamepad) in.readObject());}
             inStream.close();
             in.close();
             Recording.add(new AutoGamepad());
             Recording.add(new AutoGamepad());
-            Log.d("Henry", "Opened Successfully");
+            Log.i("Henry", "Opened Successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
