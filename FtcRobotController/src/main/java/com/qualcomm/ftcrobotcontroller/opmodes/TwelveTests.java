@@ -139,7 +139,7 @@ public class TwelveTests extends LinearOpMode {
                     Record();
                     break;
             }
-            //ANY CHANGES MUST ALSO BE ADDED TO TwelveTestAuto AS WELL!!!
+            //ANY CHANGES MUST ALSO BE ADDED TO TwelveTestsAuto AS WELL!!!
             LFront.setPower(gamepad1.left_stick_y);
             LBack.setPower(gamepad1.left_stick_y);
             RFront.setPower(gamepad1.right_stick_y);
