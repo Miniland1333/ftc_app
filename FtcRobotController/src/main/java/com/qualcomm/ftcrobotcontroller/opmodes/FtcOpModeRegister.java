@@ -101,6 +101,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     */
 
         manager.register("TeleOp", TwelveTests.class);
-        manager.register("Autonomous",TwelveTestsAuto.class);
+        manager.register("AutoRED",TwelveTestsAutoRED.class);
+        manager.register("AutoBLUE",TwelveTestsAutoBLUE.class);
 }
 }

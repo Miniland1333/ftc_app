@@ -11,15 +11,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
  * Created by Henry on 1/21/2016.
  */
-public class TwelveTestsAuto extends LinearOpMode {
+public class TwelveTestsAutoBLUE extends LinearOpMode {
     DcMotor LFront;
     DcMotor LBack;
     DcMotor RFront;
@@ -35,7 +33,7 @@ public class TwelveTestsAuto extends LinearOpMode {
     int index =0;
     ArrayList<AutoGamepad> Recording=new ArrayList<AutoGamepad>();
     protected Context context;
-    final String filename = "Auto.txt";
+    final String filename = "AutoBLUE.txt";
     private ElapsedTime recordTime = new ElapsedTime();
     AutoGamepad Gamepad1 = new AutoGamepad();
     AutoGamepad Gamepad2 = new AutoGamepad();
@@ -86,8 +84,8 @@ public class TwelveTestsAuto extends LinearOpMode {
 
             LFront.setPower(Gamepad1.left_stick_y);
             LBack.setPower(Gamepad1.left_stick_y);
-            RFront.setPower(Gamepad1.right_stick_y);
-            RBack.setPower(Gamepad1.right_stick_y);
+            RFront.setPower(Gamepad1.right_stick_y*.9);
+            RBack.setPower(Gamepad1.right_stick_y*.9);
             BLift.setPower(-(Gamepad2.left_stick_y));
 
 /*            one.setPosition((Gamepad1.left_stick_y+1)/2);
@@ -109,7 +107,7 @@ public class TwelveTestsAuto extends LinearOpMode {
 
     //Added functionality for Bucket Motor tilt
     private void TiltMotor(){
-        final int MAX_DEGREES = 25;
+        final int MAX_DEGREES = 45;
         final int TOLERANCE_DEGREES = 5;
         final int SLOW_RANGE = 15;
 
@@ -149,8 +147,8 @@ public class TwelveTestsAuto extends LinearOpMode {
 
     }
     private void makeClawOpen(){
-        RClaw.setPosition(.3);
-        LClaw.setPosition(.7);
+        RClaw.setPosition(0);
+        LClaw.setPosition(1);
         isClawOpen = true;
     }
     private void makeClawClosed(){

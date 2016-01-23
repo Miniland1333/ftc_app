@@ -68,8 +68,8 @@ public class TwelveTests extends LinearOpMode {
     int index =0;
     ArrayList<AutoGamepad>Recording=new ArrayList<AutoGamepad>();
     protected Context context;
-    final int STATE = 1;// 0=None, 1=Record, 2=Play
-    final String filename = "Auto.txt";
+    final int STATE = 0;// 0=None, 1=RecordRED, 2=RecordBLUE
+    String filename = "Auto.txt";
     private ElapsedTime recordTime = new ElapsedTime();
     private boolean prevState = false;
     FileOutputStream outStream;
@@ -107,6 +107,18 @@ public class TwelveTests extends LinearOpMode {
             outStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
             out = new ObjectOutputStream(outStream);
         }catch (Exception e) {e.printStackTrace();}
+        switch (STATE) {
+            //noinspection ConstantConditions
+            case 0:
+                break;
+            case 1:
+                filename="AutoRED";
+                break;
+            case 2:
+                filename="AutoBLUE";
+                break;
+        }
+
 /*        one=hardwareMap.servo.get("one");
         two=hardwareMap.servo.get("two");
         three=hardwareMap.servo.get("three");
@@ -138,12 +150,15 @@ public class TwelveTests extends LinearOpMode {
                 case 1:
                     Record();
                     break;
+                case 2:
+                    Record();
+                    break;
             }
-            //ANY CHANGES MUST ALSO BE ADDED TO TwelveTestsAuto AS WELL!!!
+            //ANY CHANGES MUST ALSO BE ADDED TO TwelveTestsAutoRED/BLUE AS WELL!!!
             LFront.setPower(gamepad1.left_stick_y);
             LBack.setPower(gamepad1.left_stick_y);
-            RFront.setPower(gamepad1.right_stick_y);
-            RBack.setPower(gamepad1.right_stick_y);
+            RFront.setPower(gamepad1.right_stick_y*.9);
+            RBack.setPower(gamepad1.right_stick_y*.9);
             BLift.setPower(-(gamepad2.left_stick_y));
 
 /*            one.setPosition((gamepad1.left_stick_y+1)/2);
@@ -169,7 +184,7 @@ public class TwelveTests extends LinearOpMode {
 
     //Added functionality for Bucket Motor tilt
     private void TiltMotor(){
-        final int MAX_DEGREES = 25;
+        final int MAX_DEGREES = 45;
         final int TOLERANCE_DEGREES = 5;
         final int SLOW_RANGE = 15;
 
@@ -209,8 +224,8 @@ public class TwelveTests extends LinearOpMode {
 
     }
     private void makeClawOpen(){
-        RClaw.setPosition(.3);
-        LClaw.setPosition(.7);
+        RClaw.setPosition(0);
+        LClaw.setPosition(1);
         isClawOpen = true;
     }
     private void makeClawClosed(){
@@ -276,6 +291,8 @@ public class TwelveTests extends LinearOpMode {
         telemetry.addData("1Left",gamepad1.left_stick_y);
         telemetry.addData("2Right",gamepad1.right_stick_y);
         telemetry.addData("3Bucket",LBack.getCurrentPosition()/4);
-        telemetry.addData("4Record size", Recording.size());
+        if (STATE==0){telemetry.addData("4Record size", "Recording disabled";
+        }else{telemetry.addData("4Record size", Recording.size());}
+
     }
 }
