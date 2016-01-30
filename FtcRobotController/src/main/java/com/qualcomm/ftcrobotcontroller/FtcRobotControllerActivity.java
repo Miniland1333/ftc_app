@@ -41,8 +41,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -88,6 +90,8 @@ public class FtcRobotControllerActivity extends Activity {
   public static Context mainContext;
   private Utility utility;
   protected ImageButton buttonMenu;
+  MenuItem ipAction;
+  private Handler mHandler;
 
   protected TextView textDeviceName;
   protected TextView textWifiDirectStatus;
@@ -168,13 +172,16 @@ public class FtcRobotControllerActivity extends Activity {
     updateUI = new UpdateUI(this, dimmer);
     updateUI.setRestarter(restarter);
     updateUI.setTextViews(textWifiDirectStatus, textRobotStatus,
-        textGamepad, textOpMode, textErrorMessage, textDeviceName);
+            textGamepad, textOpMode, textErrorMessage, textDeviceName);
     callback = updateUI.new Callback();
 
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
     hittingMenuButtonBrightensScreen();
+
+    Log.i("Henry",Utils.getIPAddress(true));
+
 
     if (USE_DEVICE_EMULATION) { HardwareFactory.enableDeviceEmulation(); }
   }
@@ -193,6 +200,7 @@ public class FtcRobotControllerActivity extends Activity {
 
     callback.wifiDirectUpdate(WifiDirectAssistant.Event.DISCONNECTED);
 
+    mHandler=new Handler();
     entireScreenLayout.setOnTouchListener(new View.OnTouchListener() {
       @Override
       public boolean onTouch(View v, MotionEvent event) {
@@ -242,9 +250,30 @@ public class FtcRobotControllerActivity extends Activity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.ftc_robot_controller, menu);
+    ipAction = menu.findItem(R.id.ip);
+    mStatusChecker.run();
     return true;
   }
+  Runnable mStatusChecker = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        updateIP(); //this function can change value of mInterval.
+      } finally {
+        // 100% guarantee that this always happens, even if
+        // your update method throws an exception
+        mHandler.postDelayed(mStatusChecker, 1000);
+      }
+    }
 
+    public void updateIP() {
+      if (!Utils.getIPAddress(true).equals("")) {
+        ipAction.setTitle(Utils.getIPAddress(true));
+      } else {
+        ipAction.setTitle("Not Connected");
+      }
+    }
+  };
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
@@ -261,6 +290,11 @@ public class FtcRobotControllerActivity extends Activity {
       case R.id.ip:
         dimmer.handleDimTimer();
         Toast.makeText(context, Utils.getIPAddress(true), Toast.LENGTH_LONG).show();
+        if (!Utils.getIPAddress(true).equals("")) {
+          ipAction.setTitle(Utils.getIPAddress(true));
+        } else {
+          ipAction.setTitle("Not Connected");
+        }
         return true;
       case R.id.action_about:
         // The string to launch this activity must match what's in AndroidManifest of FtcCommon for this activity.

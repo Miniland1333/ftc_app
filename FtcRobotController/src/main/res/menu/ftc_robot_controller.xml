@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:title="@string/settings_menu_item"/>
   <item
     android:id="@+id/action_restart_robot"
-    android:orderInCategory="100"
+    android:orderInCategory="1"
     android:showAsAction="never"
     android:title="@string/restart_robot_menu_item"/>
 
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:title="@string/view_logs_menu_item"/>
   <item
       android:id="@+id/ip"
-      android:orderInCategory="102"
+      android:orderInCategory="2"
       android:showAsAction="never"
       android:title="@string/ip_address"/>
   

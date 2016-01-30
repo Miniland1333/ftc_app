@@ -291,7 +291,7 @@ public class TwelveTests extends LinearOpMode {
         telemetry.addData("1Left",gamepad1.left_stick_y);
         telemetry.addData("2Right",gamepad1.right_stick_y);
         telemetry.addData("3Bucket",LBack.getCurrentPosition()/4);
-        if (STATE==0){telemetry.addData("4Record size", "Recording disabled";
+        if (STATE==0){telemetry.addData("4Record size", "Recording disabled");
         }else{telemetry.addData("4Record size", Recording.size());}
 
     }
