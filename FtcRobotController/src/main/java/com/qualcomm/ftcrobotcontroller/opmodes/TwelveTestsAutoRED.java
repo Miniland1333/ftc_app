@@ -20,26 +20,31 @@ import java.util.ArrayList;
  * Created by Henry on 1/21/2016.
  */
 public class TwelveTestsAutoRED extends LinearOpMode {
+    final String filename = "AutoRED.txt";
+
     DcMotor LFront;
     DcMotor LBack;
     DcMotor RFront;
     DcMotor RBack;
-    DcMotor FLift;
     DcMotor BLift;
     DcMotor Bucket;//Bucket Encoder is on LBack
 
     Servo LClaw;
     Servo RClaw;
+    Servo LHook;
+    Servo RHook;
 
     Boolean isClawOpen;
+    Boolean isHookOpen;
     int index =0;
     ArrayList<AutoGamepad> Recording=new ArrayList<AutoGamepad>();
     protected Context context;
-    final String filename = "AutoRED.txt";
+
     private ElapsedTime recordTime = new ElapsedTime();
     AutoGamepad Gamepad1 = new AutoGamepad();
     AutoGamepad Gamepad2 = new AutoGamepad();
-    private boolean prevState = false;
+    private boolean prevStateX = false;
+    private boolean prevStateY = false;
 
 
     //Initalization Code
@@ -48,28 +53,22 @@ public class TwelveTestsAutoRED extends LinearOpMode {
         LBack = hardwareMap.dcMotor.get("LBack");
         RFront = hardwareMap.dcMotor.get("RFront");
         RBack = hardwareMap.dcMotor.get("RBack");
-        FLift = hardwareMap.dcMotor.get("FLift");
         Bucket = hardwareMap.dcMotor.get("Bucket");
         BLift = hardwareMap.dcMotor.get("BLift");
 
         LFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
         LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
-        FLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
 
         LClaw = hardwareMap.servo.get("LClaw");
         RClaw = hardwareMap.servo.get("RClaw");
+        LHook = hardwareMap.servo.get("LHook");
+        RHook = hardwareMap.servo.get("RHook");
 
         context = FtcRobotControllerActivity.mainContext;
-/*        one=hardwareMap.servo.get("one");
-        two=hardwareMap.servo.get("two");
-        three=hardwareMap.servo.get("three");
-        four=hardwareMap.servo.get("four");
-        five=hardwareMap.servo.get("five");
-        six=hardwareMap.servo.get("six");*/
 
         //Motor and Servo Initialization
-        makeClawClosed();
         makeClawOpen();
+        makeHookOpen();
 
     }
     //Starting point for OpModes
@@ -90,16 +89,9 @@ public class TwelveTestsAutoRED extends LinearOpMode {
             RBack.setPower(Gamepad1.right_stick_y*.9);
             BLift.setPower(-(Gamepad2.left_stick_y));
 
-/*            one.setPosition((Gamepad1.left_stick_y+1)/2);
-            two.setPosition((Gamepad1.left_stick_y+1)/2);
-            three.setPosition((Gamepad1.left_stick_y+1)/2);
-            four.setPosition((Gamepad1.right_stick_y+1)/2);
-            five.setPosition((Gamepad1.right_stick_y+1)/2);
-            six.setPosition((Gamepad1.right_stick_y+1)/2);*/
-
             //Special Functions
             TiltMotor();
-            FLift();
+            Hook();
             Claw();
 
 
@@ -128,18 +120,12 @@ public class TwelveTestsAutoRED extends LinearOpMode {
         }
     }
 
-    //Back Lift controls
-    private void FLift(){
-        if (Gamepad2.dpad_up){FLift.setPower(.5);}
-        else if (Gamepad2.dpad_down){FLift.setPower(-.5);}
-        else{FLift.setPowerFloat();}
-    }
 
     //Claw Servo controls
     private void Claw() {  //This class control the toggle to open/close the Claw
-        if (!Gamepad2.a){prevState=false;}
-        if (Gamepad2.a&&!prevState) {
-            prevState=true;
+        if (!Gamepad2.x){prevStateX=false;}
+        if (Gamepad2.x&&!prevStateX) {
+            prevStateX=true;
             if (isClawOpen) {
                 makeClawClosed();
             } else {
@@ -158,7 +144,30 @@ public class TwelveTestsAutoRED extends LinearOpMode {
         LClaw.setPosition(.3);
         isClawOpen = false;
     }
+    //Hook Servo Controls
+    private void Hook() {  //This class control the toggle to open/close the Hook
+        if (!gamepad2.y){
+            prevStateY =false;}
+        if (gamepad2.y&&!prevStateY) {
+            prevStateY =true;
+            if (isHookOpen) {
+                makeHookClosed();
+            } else {
+                makeHookOpen();
+            }
+        }
 
+    }
+    private void makeHookOpen(){
+        RHook.setPosition(.25);
+        LHook.setPosition(.25);
+        isHookOpen = true;
+    }
+    private void makeHookClosed(){
+        RHook.setPosition(.5);
+        LHook.setPosition(.5);
+        isHookOpen = false;
+    }
     //Autonomous Play/Open
 
     private void Play() {

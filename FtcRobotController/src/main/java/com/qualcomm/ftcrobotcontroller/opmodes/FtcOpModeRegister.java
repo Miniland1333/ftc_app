@@ -99,7 +99,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     /*
     * Custom TeleOp Programs
     */
-
+manager.register("ServoParty" , ServoParty.class);
         manager.register("TeleOp", TwelveTests.class);
         //manager.register("AutoRED",TwelveTestsAutoRED.class);
         //manager.register("AutoBLUE",TwelveTestsAutoBLUE.class);

@@ -11,18 +11,18 @@ public class ServoParty extends LinearOpMode{
 
     Servo one;
     Servo two;
-    Servo three;
+    /*Servo three;
     Servo four;
     Servo five;
     Servo six;
-
+*/
     private void initialize(){
-        one=hardwareMap.servo.get("one");
-        two=hardwareMap.servo.get("two");
-        three=hardwareMap.servo.get("three");
+        one=hardwareMap.servo.get("LHook");
+        two=hardwareMap.servo.get("RHook");
+        /*three=hardwareMap.servo.get("three");
         four=hardwareMap.servo.get("four");
         five=hardwareMap.servo.get("five");
-        six=hardwareMap.servo.get("six");
+        six=hardwareMap.servo.get("six");*/
 
     }
 
@@ -36,15 +36,15 @@ public class ServoParty extends LinearOpMode{
 
             one.setPosition((gamepad1.left_stick_y+1)/2);
             two.setPosition((-gamepad1.left_stick_y+1)/2);
-            three.setPosition((gamepad1.left_stick_y+1)/2);
+            /*three.setPosition((gamepad1.left_stick_y+1)/2);
             four.setPosition((gamepad1.right_stick_y+1)/2);
             five.setPosition((gamepad1.right_stick_y+1)/2);
             six.setPosition((gamepad1.right_stick_y+1)/2);
-
+*/
 
             double pickle;
             pickle=(gamepad1.left_stick_y+1)/2;
-            pickle= Range.clip(pickle,.25,.65);
+           /* pickle= Range.clip(pickle,.25,.65);*/
             one.setPosition(pickle);
             two.setPosition(1-pickle);
             Telemetry();

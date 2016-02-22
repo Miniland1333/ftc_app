@@ -53,35 +53,31 @@ import java.util.ArrayList;
  * Created by Staff on 9/13/2015.
  */
 public class TwelveTests extends LinearOpMode {
+
     DcMotor LFront;
     DcMotor LBack;
     DcMotor RFront;
     DcMotor RBack;
-    DcMotor FLift;
     DcMotor BLift;
     DcMotor Bucket;//Bucket Encoder is on LBack
 
     Servo LClaw;
     Servo RClaw;
+    Servo LHook;
+    Servo RHook;
 
     Boolean isClawOpen;
+    Boolean isHookOpen;
     int index =0;
     ArrayList<AutoGamepad>Recording=new ArrayList<AutoGamepad>();
     protected Context context;
+    private ElapsedTime recordTime = new ElapsedTime();
     final int STATE = 0;// 0=None, 1=RecordRED, 2=RecordBLUE
     String filename = "Auto.txt";
-    private ElapsedTime recordTime = new ElapsedTime();
-    private boolean prevState = false;
     FileOutputStream outStream;
     ObjectOutputStream out;
-
-
-/*    Servo one;
-    Servo two;
-    Servo three;
-    Servo four;
-    Servo five;
-    Servo six;*/
+    private boolean prevStateX = false;
+    private boolean prevStateY = false;
 
 
     //Initalization Code
@@ -91,16 +87,16 @@ public class TwelveTests extends LinearOpMode {
         LBack = hardwareMap.dcMotor.get("LBack");
         RFront = hardwareMap.dcMotor.get("RFront");
         RBack = hardwareMap.dcMotor.get("RBack");
-        FLift = hardwareMap.dcMotor.get("FLift");
         Bucket = hardwareMap.dcMotor.get("Bucket");
         BLift = hardwareMap.dcMotor.get("BLift");
 
         LFront.setDirection(DcMotor.Direction.REVERSE); //Reversing based on default motor rotation direction
         LBack.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
-        FLift.setDirection(DcMotor.Direction.REVERSE);  //Reversing based on default motor rotation direction
 
         LClaw = hardwareMap.servo.get("LClaw");
         RClaw = hardwareMap.servo.get("RClaw");
+        LHook = hardwareMap.servo.get("LHook");
+        RHook = hardwareMap.servo.get("RHook");
 
         context = FtcRobotControllerActivity.mainContext;
         try{
@@ -119,16 +115,10 @@ public class TwelveTests extends LinearOpMode {
                 break;
         }
 
-/*        one=hardwareMap.servo.get("one");
-        two=hardwareMap.servo.get("two");
-        three=hardwareMap.servo.get("three");
-        four=hardwareMap.servo.get("four");
-        five=hardwareMap.servo.get("five");
-        six=hardwareMap.servo.get("six");*/
 
         //Motor and Servo Initialization
-        makeClawClosed();
         makeClawOpen();
+        makeHookOpen();
 
     }
 
@@ -158,19 +148,12 @@ public class TwelveTests extends LinearOpMode {
             LFront.setPower(gamepad1.left_stick_y);
             LBack.setPower(gamepad1.left_stick_y);
             RFront.setPower(gamepad1.right_stick_y*.9);
-            RBack.setPower(gamepad1.right_stick_y*.9);
+            RBack.setPower(gamepad1.right_stick_y * .9);
             BLift.setPower(-(gamepad2.left_stick_y));
-
-/*            one.setPosition((gamepad1.left_stick_y+1)/2);
-            two.setPosition((gamepad1.left_stick_y+1)/2);
-            three.setPosition((gamepad1.left_stick_y+1)/2);
-            four.setPosition((gamepad1.right_stick_y+1)/2);
-            five.setPosition((gamepad1.right_stick_y+1)/2);
-            six.setPosition((gamepad1.right_stick_y+1)/2);*/
 
             //Special Functions
             TiltMotor();
-            FLift();
+            Hook();
             Claw();
 
 
@@ -203,18 +186,13 @@ public class TwelveTests extends LinearOpMode {
         }
     }
 
-    //Back Lift controls
-    private void FLift(){
-        if (gamepad2.dpad_up){FLift.setPower(.5);}
-        else if (gamepad2.dpad_down){FLift.setPower(-.5);}
-        else{FLift.setPowerFloat();}
-    }
 
     //Claw Servo controls
     private void Claw() {  //This class control the toggle to open/close the Claw
-        if (!gamepad2.a){prevState=false;}
-        if (gamepad2.a&&!prevState) {
-            prevState=true;
+        if (!gamepad2.x){
+            prevStateX =false;}
+        if (gamepad2.x&&!prevStateX) {
+            prevStateX =true;
             if (isClawOpen) {
                 makeClawClosed();
             } else {
@@ -232,6 +210,31 @@ public class TwelveTests extends LinearOpMode {
         RClaw.setPosition(.7);
         LClaw.setPosition(.3);
         isClawOpen = false;
+    }
+
+    //Hook Servo Controls
+    private void Hook() {  //This class control the toggle to open/close the Hook
+        if (!gamepad2.y){
+            prevStateY =false;}
+        if (gamepad2.y&&!prevStateY) {
+            prevStateY =true;
+            if (isHookOpen) {
+                makeHookClosed();
+            } else {
+                makeHookOpen();
+            }
+        }
+
+    }
+    private void makeHookOpen(){
+        RHook.setPosition(1);
+        LHook.setPosition(0);
+        isHookOpen = true;
+    }
+    private void makeHookClosed(){
+        RHook.setPosition(.25);
+        LHook.setPosition(.75);
+        isHookOpen = false;
     }
 
     //Autonomous Record/Save and Play/Open
