@@ -9,7 +9,7 @@ android {
         trial{}
         competition{}
     }
-    compileSdkVersion 'Google Inc.:Google APIs:19'
+    compileSdkVersion 19
     buildToolsVersion '21.1.2'
 }
 
